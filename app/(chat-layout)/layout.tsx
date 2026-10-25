@@ -1,4 +1,5 @@
 import { Header } from "@/components/header";
+import { SocketProvider } from "@/providers/socket-provider";
 import React from "react";
 
 export default function ChatLayout({
@@ -8,8 +9,10 @@ export default function ChatLayout({
 }) {
   return (
     <>
-      <Header />
-      {children}
+      <SocketProvider>
+        <Header />
+        {children}
+      </SocketProvider>
     </>
   );
 }

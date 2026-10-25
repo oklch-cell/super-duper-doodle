@@ -3,10 +3,10 @@
 import Link from "next/link";
 
 import { LogIn, LockKeyhole, Globe2 } from "lucide-react";
-import { useUser } from "@/stores/user-store";
+import { useStore } from "@/stores/store";
 
 export function NavLinks() {
-  const { user } = useUser();
+  const { user } = useStore();
 
   return (
     <nav className="flex items-center gap-5">
@@ -19,10 +19,10 @@ export function NavLinks() {
             PRIVATE <LockKeyhole size={14} />
           </Link>
           <Link
-            href="/global"
+            href="/public"
             className="flex items-center text-sm font-medium tracking-wide gap-2 hover:underline"
           >
-            GLOBAL <Globe2 size={14} />
+            PUBLIC <Globe2 size={14} />
           </Link>
         </>
       ) : (
@@ -35,7 +35,7 @@ export function NavLinks() {
           </Link>
           <Link
             href="/signup"
-            className="flex items-center text-sm font-medium tracking-wide gap-2 p-2 bg-slate-300 hover:shadow border rounded"
+            className="flex items-center text-sm font-medium tracking-wide gap-2 p-2 bg-slate-300 shadow hover:shadow-none rounded"
           >
             SIGNUP
           </Link>

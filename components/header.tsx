@@ -5,7 +5,7 @@ import { NavLinks } from "./nav-links";
 
 export function Header() {
   return (
-    <header className="p-5 flex items-center justify-between border-b">
+    <header className="px-5 py-2 flex items-center justify-between border-b relative">
       <Link href="/" className="text-3xl font-semibold tracking-widest">
         WebChat
       </Link>
