@@ -49,6 +49,7 @@ interface SocketAction {
   messageSet: (message: Message) => void;
   fetchMessages: (group: string) => void;
   groupMessageSet: (message: GroupMessage) => void;
+  resetMessages: () => void;
 }
 
 type Store = UserState & UserAction & SocketState & SocketAction;
@@ -136,4 +137,7 @@ export const useStore = create<Store>()((set, get) => ({
       console.log(json);
     }
   },
+  resetMessages: () => {
+    set({ messages: [] });
+  }, 
 }));

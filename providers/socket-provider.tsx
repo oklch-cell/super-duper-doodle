@@ -8,7 +8,7 @@ import { io } from "socket.io-client";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export function SocketProvider({ children }: { children: React.ReactNode }) {
-  const { socketSet, user, socket, usersListSet } = useStore();
+  const { socketSet, user, socket, usersListSet, disconnect } = useStore();
 
   useLayoutEffect(() => {
     const connect = () => {

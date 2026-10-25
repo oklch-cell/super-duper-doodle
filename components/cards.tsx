@@ -6,11 +6,9 @@ import { useStore } from "@/stores/store";
 import Link from "next/link";
 
 export function UserCard({ username }: { username: string }) {
-  const { selectedUserSet } = useStore();
-
   return (
-    <button
-      onClick={() => selectedUserSet(username)}
+    <Link
+      href={`/private/${username}`}
       className="group p-3 w-full flex items-center justify-start gap-3 relative border-b cursor-pointer"
     >
       <Image
@@ -26,7 +24,7 @@ export function UserCard({ username }: { username: string }) {
         className="invisible absolute right-15 group-hover:right-3 group-hover:visible transition-all"
         size={16}
       />
-    </button>
+    </Link>
   );
 }
 

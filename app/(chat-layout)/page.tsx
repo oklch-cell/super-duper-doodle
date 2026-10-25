@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <main className="max-w-5xl w-full mx-auto flex justify-center flex-col gap-10 p-5">
-        <h1 className="text-2xl md:text-5xl font-semibold text-center">
+        <h1 className="text-xl sm:text-2xl md:text-5xl font-semibold text-center">
           Welcome to the WebChat, where{" "}
           <span className="text-slate-300">privacy</span> matters.
         </h1>

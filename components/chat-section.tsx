@@ -83,15 +83,23 @@ export function PublicChat({ group }: { group: string }) {
   }
 }
 
-export function PrivateChat() {
-  const { selectedUser, messages, socket, messageSet } = useStore();
+export function PrivateChat({ user }: { user: string }) {
+  const { messages, socket, messageSet, usersList, resetMessages } = useStore();
+
+  const set = new Set(usersList);
+
+  if (!set.has(user)) {
+    notFound();
+  }
 
   useEffect(() => {
     if (!socket) return;
 
+    resetMessages();
+
     const handlePrivateMessage = (message: string) => {
       const { data, sender } = JSON.parse(message);
-      if (sender === selectedUser) {
+      if (sender === user) {
         messageSet({ text: data, type: "receive" });
       } else {
         toast.success(`${data} from ${sender}`);
@@ -103,7 +111,7 @@ export function PrivateChat() {
     return () => {
       socket.off("private-message", handlePrivateMessage);
     };
-  }, [selectedUser, socket, messageSet]);
+  }, [user, socket, messageSet]);
 
   useEffect(() => {
     const container = document.getElementById("messages");
@@ -112,7 +120,7 @@ export function PrivateChat() {
     }
   }, [messages]);
 
-  if (selectedUser) {
+  if (user) {
     return (
       <section className="border rounded grid grid-rows-[auto_minmax(0,1fr)_auto]">
         <div className="p-3 border-b flex items-center justify-between gap-3">
@@ -124,18 +132,15 @@ export function PrivateChat() {
               height={30}
               className="aspect-square rounded-full border border-black"
             />
-            <span className="font-medium text-lg">{selectedUser}</span>
+            <span className="font-medium text-lg">{user}</span>
           </div>
         </div>
-        <div
-          id="messages"
-          className="p-3 flex flex-col gap-1 overflow-y-auto scroll-auto"
-        >
+        <div id="messages" className="p-3 flex flex-col gap-1 overflow-y-auto">
           {messages.map((message, index) => (
             <Message key={index} type={message.type} text={message.text} />
           ))}
         </div>
-        <ChatForm type="private" />
+        <ChatForm type="private" username={user} />
       </section>
     );
   } else {

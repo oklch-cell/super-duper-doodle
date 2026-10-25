@@ -7,22 +7,26 @@ import { SubmitEventHandler, useState } from "react";
 export function ChatForm({
   type,
   group,
+  username,
 }: {
   type: "private" | "public";
   group?: string;
+  username?: string;
 }) {
   const [message, setMessage] = useState("");
 
-  const { sendMessage, user, selectedUser, groupMessageSet } = useStore();
+  const { sendMessage, user, groupMessageSet } = useStore();
 
   const handleMessage: SubmitEventHandler = (e) => {
     e.preventDefault();
+
+    if (!message.length) return;
 
     if (type === "private") {
       sendMessage("private-message", {
         data: message,
         sender: user?.username,
-        receiver: selectedUser,
+        receiver: username,
       });
     }
     if (type === "public") {
@@ -35,7 +39,7 @@ export function ChatForm({
       groupMessageSet({ sender: user.username, text: message, type: "send" });
     }
 
-    console.log(message);
+    setMessage("");
   };
 
   return (
