@@ -1,7 +1,7 @@
 "use client";
 
 import { useStore } from "@/stores/store";
-import { LockIcon, Mail, User2 } from "lucide-react";
+import { LockIcon, Mail, User2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SubmitEventHandler, useState } from "react";
@@ -15,9 +15,12 @@ export function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin: SubmitEventHandler = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
 
     const response = await fetch(`${API_URL}/api/auth/login`, {
       method: "POST",
@@ -33,10 +36,14 @@ export function LoginForm() {
     if (response.ok) {
       userSet(json.session);
       toast.success("Login successful!");
-      router.push('/');
+      setEmail("");
+      setPassword("");
+      router.push("/");
     } else {
       toast.error(json.message);
     }
+
+    setLoading(false);
   };
 
   return (
@@ -89,9 +96,10 @@ export function LoginForm() {
       </div>
       <button
         type="submit"
-        className="px-2 py-1 bg-slate-300 rounded cursor-pointer shadow hover:shadow-none"
+        disabled={loading}
+        className="px-2 py-1 bg-slate-300 rounded cursor-pointer shadow hover:shadow-none h-8 flex items-center justify-center"
       >
-        LOGIN
+        {loading ? <Loader2 size={14} className="animate-spin" /> : "LOGIN"}
       </button>
     </form>
   );
@@ -104,10 +112,12 @@ export function SignupForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignup: SubmitEventHandler = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
     const response = await fetch(`${API_URL}/api/auth/signup`, {
       method: "POST",
       body: JSON.stringify({ email, password, username }),
@@ -122,10 +132,14 @@ export function SignupForm() {
     if (response.ok) {
       userSet(json.session);
       toast.success("Signup successful!");
-      router.push('/');
+      setEmail("");
+      setUsername("");
+      setPassword("");
+      router.push("/");
     } else {
       toast.error(json.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -196,9 +210,10 @@ export function SignupForm() {
       </div>
       <button
         type="submit"
-        className="px-2 py-1 bg-slate-300 rounded cursor-pointer shadow hover:shadow-none"
+        disabled={loading}
+        className="px-2 py-1 bg-slate-300 rounded cursor-pointer shadow hover:shadow-none h-8 flex items-center justify-center"
       >
-        SIGNUP
+        {loading ? <Loader2 size={14} className="animate-spin" /> : "SIGNUP"}
       </button>
     </form>
   );

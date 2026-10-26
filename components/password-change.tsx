@@ -1,7 +1,7 @@
 "use client";
 
 import { useStore } from "@/stores/store";
-import { LockIcon } from "lucide-react";
+import { LockIcon, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { SubmitEventHandler, useState } from "react";
 import toast from "react-hot-toast";
@@ -15,12 +15,14 @@ export function PasswordChange() {
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit: SubmitEventHandler = async (e) => {
     e.preventDefault();
 
     if (!user) return;
 
+    setLoading(true);
     const response = await fetch(`${API_URL}/api/auth/password`, {
       method: "PATCH",
       body: JSON.stringify({
@@ -44,6 +46,7 @@ export function PasswordChange() {
     }
     setNewPassword("");
     setOldPassword("");
+    setLoading(false);
   };
 
   return (
@@ -89,9 +92,10 @@ export function PasswordChange() {
       </div>
       <button
         type="submit"
-        className="px-8 py-1 w-max bg-slate-300 rounded cursor-pointer shadow hover:shadow-none"
+        disabled={loading}
+        className="px-8 py-1 w-max bg-slate-300 rounded cursor-pointer shadow hover:shadow-none h-8 min-w-30 flex items-center justify-center"
       >
-        CHANGE
+        {loading ? <Loader2 size={14} className="animate-spin" /> : "CHANGE"}
       </button>
     </form>
   );

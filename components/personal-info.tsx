@@ -1,7 +1,7 @@
 "use client";
 
 import { useStore } from "@/stores/store";
-import { Mail, User2 } from "lucide-react";
+import { Loader2, Mail, User2 } from "lucide-react";
 import { SubmitEventHandler, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -12,6 +12,7 @@ export function PersonalInfo() {
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -24,6 +25,8 @@ export function PersonalInfo() {
     e.preventDefault();
 
     if (!user) return;
+
+    setLoading(true);
 
     const response = await fetch(`${API_URL}/api/auth`, {
       method: "PATCH",
@@ -43,6 +46,8 @@ export function PersonalInfo() {
     } else {
       toast.error(json.message);
     }
+
+    setLoading(false);
   };
 
   return (
@@ -85,9 +90,10 @@ export function PersonalInfo() {
       </div>
       <button
         type="submit"
-        className="px-8 py-1 w-max bg-slate-300 rounded cursor-pointer shadow hover:shadow-none"
+        disabled={loading}
+        className="px-8 py-1 w-max bg-slate-300 rounded cursor-pointer shadow hover:shadow-none h-8 min-w-25 flex items-center justify-center"
       >
-        SAVE
+        {loading ? <Loader2 size={14} className="animate-spin" /> : "SAVE"}
       </button>
     </form>
   );

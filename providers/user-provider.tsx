@@ -6,7 +6,7 @@ import { useLayoutEffect } from "react";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export function UserInitializer() {
-  const { userSet } = useStore();
+  const { userSet, setInitialized } = useStore();
 
   useLayoutEffect(() => {
     async function getMe() {
@@ -20,12 +20,12 @@ export function UserInitializer() {
         userSet(json.session);
       } else {
         userSet(null);
-        console.log(json.message);
       }
+      setInitialized();
     }
 
     getMe();
-  }, []);
+  }, [userSet, setInitialized]);
 
   return null;
 }

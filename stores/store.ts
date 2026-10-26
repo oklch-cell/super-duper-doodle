@@ -20,39 +20,35 @@ interface GroupMessage {
   type: "send" | "receive";
 }
 
-interface UserState {
-  user: User | null;
-  usersList: string[];
-}
-
-interface UserAction {
-  userSet: (user: User | null) => void;
-  usersListSet: (usersList: string[]) => void;
-}
-
-interface SocketState {
+interface StoreState {
   socket: Socket | null;
   isConnected: boolean;
   messages: Message[];
-  selectedUser: string | null;
-  selectedGroup: string | null;
+  // selectedUser: string | null;
+  // selectedGroup: string | null;
   groups: string[];
   groupMessages: GroupMessage[];
+  user: User | null;
+  usersList: string[];
+  isInitialized: boolean;
 }
 
-interface SocketAction {
+interface StoreAction {
   socketSet: (socket: Socket | null) => void;
   disconnect: () => void;
   sendMessage: (event: string, data: any) => void;
-  selectedUserSet: (name: string | null) => void;
-  selectedGroupSet: (name: string | null) => void;
+  // selectedUserSet: (name: string | null) => void;
+  // selectedGroupSet: (name: string | null) => void;
   messageSet: (message: Message) => void;
   fetchMessages: (group: string) => void;
   groupMessageSet: (message: GroupMessage) => void;
   resetMessages: () => void;
+  userSet: (user: User | null) => void;
+  usersListSet: (usersList: string[]) => void;
+  setInitialized: () => void;
 }
 
-type Store = UserState & UserAction & SocketState & SocketAction;
+type Store = StoreState & StoreAction;
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -62,8 +58,8 @@ export const useStore = create<Store>()((set, get) => ({
   isConnected: false,
   messages: [],
   usersList: [],
-  selectedUser: null,
-  selectedGroup: null,
+  // selectedUser: null,
+  // selectedGroup: null,
   groups: [
     "Sports",
     "Entertainment",
@@ -75,6 +71,7 @@ export const useStore = create<Store>()((set, get) => ({
     "DIY",
   ],
   groupMessages: [],
+  isInitialized: false,
 
   userSet: (user) => {
     set({ user });
@@ -100,12 +97,12 @@ export const useStore = create<Store>()((set, get) => ({
   usersListSet: (usersList: string[]) => {
     set({ usersList });
   },
-  selectedUserSet: (selectedUser) => {
-    set({ selectedUser, selectedGroup: null });
-  },
-  selectedGroupSet: (selectedGroup) => {
-    set({ selectedGroup, selectedUser: null });
-  },
+  // selectedUserSet: (selectedUser) => {
+  //   set({ selectedUser, selectedGroup: null });
+  // },
+  // selectedGroupSet: (selectedGroup) => {
+  //   set({ selectedGroup, selectedUser: null });
+  // },
   messageSet: (message) => {
     const { messages } = get();
     set({ messages: [...messages, message] });
@@ -139,5 +136,8 @@ export const useStore = create<Store>()((set, get) => ({
   },
   resetMessages: () => {
     set({ messages: [] });
-  }, 
+  },
+  setInitialized: () => {
+    set({ isInitialized: true });
+  }
 }));
