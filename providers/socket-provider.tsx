@@ -5,7 +5,7 @@ import { useStore } from "@/stores/store";
 import React from "react";
 import { io } from "socket.io-client";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL;
 
 export function SocketProvider({ children }: { children: React.ReactNode }) {
   const { socketSet, user, socket, usersListSet, disconnect } = useStore();
@@ -16,7 +16,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
 
       if (user) {
         console.log("STATUS:", user);
-        const socketInstance = io(API_URL, {
+        const socketInstance = io(SOCKET_URL, {
           withCredentials: true,
           query: {
             id: user.id,
